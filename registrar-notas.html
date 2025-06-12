@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registrar Calificaciones</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #c2ffd8, #465efb);
+      margin: 0;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+
+    .form-box {
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 8px 15px rgba(0,0,0,0.2);
+      width: 95%;
+      max-width: 1000px;
+      animation: fadeIn 0.8s ease-in-out;
+    }
+
+    h2 {
+      text-align: center;
+      color: #333;
+    }
+
+    form {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 20px;
+      align-items: center;
+      justify-content: center;
+    }
+
+    input, textarea, button {
+      padding: 10px;
+      font-size: 14px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+    }
+
+    textarea {
+      resize: vertical;
+    }
+
+    button {
+      background-color: #465efb;
+      color: white;
+      cursor: pointer;
+      transition: background 0.3s ease;
+      border: none;
+    }
+
+    button:hover {
+      background-color: #2c3ecb;
+    }
+
+    table {
+      width: 100%;
+      margin-top: 20px;
+      border-collapse: collapse;
+    }
+
+    th, td {
+      padding: 10px;
+      border: 1px solid #ccc;
+      text-align: center;
+    }
+
+    .mensaje {
+      text-align: center;
+      color: green;
+      margin-top: 10px;
+      font-weight: bold;
+    }
+
+    .btn-group {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      margin-top: 20px;
+    }
+
+    @keyframes fadeIn {
+      from {opacity: 0; transform: translateY(20px);}
+      to {opacity: 1; transform: translateY(0);}
+    }
+  </style>
+</head>
+<body>
+
+  <div class="form-box">
+    <h2>Registrar Calificaciones</h2>
+    <form id="formNotas">
+      <input type="text" name="estudiante" placeholder="Nombre del estudiante" required>
+      <input type="text" name="materia" placeholder="Materia" required>
+      <input type="number" name="nota" placeholder="Nota (0 - 10)" min="0" step="0.1" required>
+      <textarea name="retroalimentacion" placeholder="Retroalimentación" rows="2" cols="30" required></textarea>
+      <button type="submit">Agregar</button>
+    </form>
+
+    <table id="tablaNotas">
+      <thead>
+        <tr>
+          <th>Estudiante</th>
+          <th>Materia</th>
+          <th>Nota</th>
+          <th>Retroalimentación</th>
+          <th>Fecha</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+
+    <div class="btn-group">
+      <button onclick="guardarNotas()">Guardar</button>
+      <button onclick="location.href='inicio.html'">Salir</button>
+    </div>
+
+    <div class="mensaje" id="mensaje"></div>
+  </div>
+
+  <script>
+    const form = document.getElementById("formNotas");
+    const tablaBody = document.querySelector("#tablaNotas tbody");
+    const mensaje = document.getElementById("mensaje");
+    let notasTemp = [];
+
+    form.addEventListener("submit", function(e) {
+      e.preventDefault();
+
+      const estudiante = form.estudiante.value.trim();
+      const materia = form.materia.value.trim();
+      const notaStr = form.nota.value.trim().replace(",", ".");
+      const nota = parseFloat(notaStr);
+      const retro = form.retroalimentacion.value.trim();
+      const fecha = new Date().toLocaleDateString();
+
+      if (!estudiante || !materia || retro === "" || isNaN(nota) || nota < 0 || nota > 10) {
+        mensaje.textContent = "Todos los campos son obligatorios y la nota debe estar entre 0 y 10.";
+        return;
+      }
+
+      const nuevaNota = { estudiante, materia, nota, retroalimentacion: retro, fecha };
+      notasTemp.push(nuevaNota);
+
+      const fila = document.createElement("tr");
+      fila.innerHTML = `
+        <td>${estudiante}</td>
+        <td>${materia}</td>
+        <td>${nota}</td>
+        <td>${retro}</td>
+        <td>${fecha}</td>
+      `;
+      tablaBody.appendChild(fila);
+
+      form.reset();
+      mensaje.textContent = "";
+    });
+
+    function guardarNotas() {
+      if (notasTemp.length === 0) {
+        mensaje.textContent = "No hay datos para guardar.";
+        return;
+      }
+
+      const existentes = JSON.parse(localStorage.getItem("notas")) || [];
+      localStorage.setItem("notas", JSON.stringify(existentes.concat(notasTemp)));
+
+      mensaje.textContent = "✅ Notas guardadas correctamente";
+      notasTemp = [];
+
+      setTimeout(() => location.href = "ver-notas.html", 1500);
+    }
+  </script>
+
+</body>
+</html>

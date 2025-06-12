@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Ver Notas</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #c2ffd8, #465efb);
+      margin: 0;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+
+    .container {
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 8px 15px rgba(0,0,0,0.2);
+      width: 95%;
+      max-width: 1000px;
+      animation: fadeIn 0.8s ease-in-out;
+    }
+
+    h2 {
+      text-align: center;
+      color: #333;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+
+    th, td {
+      padding: 10px;
+      border: 1px solid #ccc;
+      text-align: center;
+    }
+
+    .btn-group {
+      display: flex;
+      justify-content: center;
+      margin-top: 20px;
+    }
+
+    button {
+      padding: 10px 20px;
+      background-color: #465efb;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #2c3ecb;
+    }
+
+    @keyframes fadeIn {
+      from {opacity: 0; transform: translateY(20px);}
+      to {opacity: 1; transform: translateY(0);}
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Notas Registradas</h2>
+    <table id="tablaNotas">
+      <thead>
+        <tr>
+          <th>Estudiante</th>
+          <th>Materia</th>
+          <th>Nota</th>
+          <th>Retroalimentación</th>
+          <th>Fecha</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+
+    <div class="btn-group">
+      <button onclick="location.href='inicio.html'">Salir</button>
+    </div>
+  </div>
+
+  <script>
+    const tablaBody = document.querySelector("#tablaNotas tbody");
+    const notasGuardadas = JSON.parse(localStorage.getItem("notas")) || [];
+
+    if (notasGuardadas.length === 0) {
+      tablaBody.innerHTML = `<tr><td colspan="5">No hay notas registradas.</td></tr>`;
+    } else {
+      notasGuardadas.forEach(nota => {
+        const fila = document.createElement("tr");
+        fila.innerHTML = `
+          <td>${nota.estudiante}</td>
+          <td>${nota.materia}</td>
+          <td>${nota.nota}</td>
+          <td>${nota.retroalimentacion}</td>
+          <td>${nota.fecha}</td>
+        `;
+        tablaBody.appendChild(fila);
+      });
+    }
+  </script>
+</body>
+</html>

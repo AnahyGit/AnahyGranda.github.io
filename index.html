@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Crear Cuenta </title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #f6d365, #fda085);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+
+    .register-box {
+      background: white;
+      padding: 40px;
+      border-radius: 15px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+      width: 320px;
+      text-align: center;
+      animation: fadeIn 1s ease-in-out;
+    }
+
+    h2 {
+      margin-bottom: 20px;
+      color: #333;
+    }
+
+    input[type="text"],
+    input[type="date"],
+    input[type="email"],
+    input[type="password"] {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 14px;
+      transition: 0.3s;
+    }
+
+    input:focus {
+      border-color: #fda085;
+      outline: none;
+      box-shadow: 0 0 5px #fda085;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      background: #fda085;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    button:hover {
+      background: #f78e67;
+    }
+
+    @keyframes fadeIn {
+      from {opacity: 0; transform: translateY(20px);}
+      to {opacity: 1; transform: translateY(0);}
+    }
+  </style>
+</head>
+<body>
+
+  <div class="register-box">
+    <h2>Sistema de Gestión de Calificaciones Docente </h2>
+    <h3> Crear Cuenta </h3>
+    <form onsubmit="redirigir(event)">
+      <input type="text" name="nombre" placeholder="Nombre" required />
+      <input type="text" name="apellido" placeholder="Apellido" required />
+      <input type="date" name="fechaNacimiento" required />
+      <input type="email" name="correo" placeholder="Correo electrónico" required />
+      <input type="password" name="contrasena" placeholder="Contraseña" required />
+      <button type="submit">Registrar</button>
+    </form>
+  </div>
+
+  <script>
+    function redirigir(e) {
+      e.preventDefault();
+  
+      const datos = {
+        nombre: document.querySelector('[name="nombre"]').value,
+        apellido: document.querySelector('[name="apellido"]').value,
+        fechaNacimiento: document.querySelector('[name="fechaNacimiento"]').value,
+        correo: document.querySelector('[name="correo"]').value,
+        contrasena: document.querySelector('[name="contrasena"]').value
+      };
+  
+      localStorage.setItem("usuario", JSON.stringify(datos)); // ✅ GUARDA los datos
+      window.location.href = "login.html"; // redirige al login
+    }
+  </script>
+  
+
+</body>
+</html>

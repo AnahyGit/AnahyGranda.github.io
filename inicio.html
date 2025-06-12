@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Inicio</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #89f7fe, #66a6ff);
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: white;
+      padding: 15px 20px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+
+    .logo-perfil {
+      position: relative;
+    }
+
+    .perfil-icon {
+      width: 35px;
+      height: 35px;
+      border-radius: 50%;
+      background-color: #ccc;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      font-size: 20px;
+    }
+
+    .perfil-info {
+      position: absolute;
+      top: 45px;
+      right: 0;
+      background-color: white;
+      padding: 10px;
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      display: none;
+      z-index: 10;
+      min-width: 150px;
+      text-align: center;
+    }
+
+    .perfil-info.show {
+      display: block;
+    }
+
+    .cerrar-sesion {
+      background-color: #ff5e5e;
+      border: none;
+      color: white;
+      padding: 10px 15px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    main {
+      flex-grow: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .inicio-box {
+      background: white;
+      padding: 40px;
+      border-radius: 15px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+      text-align: center;
+      animation: fadeIn 1s ease-in-out;
+    }
+
+    h2 {
+      color: #333;
+      margin-bottom: 20px;
+    }
+
+    .botones {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      margin-top: 20px;
+    }
+
+    .botones button {
+      padding: 12px;
+      background-color: #66a6ff;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .botones button:hover {
+      background-color: #4d8de0;
+    }
+
+    @keyframes fadeIn {
+      from {opacity: 0; transform: translateY(20px);}
+      to {opacity: 1; transform: translateY(0);}
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <button class="cerrar-sesion" onclick="cerrarSesion()">Cerrar sesión</button>
+
+    <div class="logo-perfil">
+      <div class="perfil-icon" onclick="togglePerfil()">👤</div>
+      <div id="perfilInfo" class="perfil-info"></div>
+    </div>
+  </header>
+
+  <main>
+    <div class="inicio-box">
+      <h2 id="bienvenida">Bienvenido de nuevo</h2>
+      <div class="botones">
+        <button onclick="location.href='registrar-notas.html'">Registrar calificaciones</button>
+        <button onclick="location.href='ver-notas.html'">Ver calificaciones</button>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    const usuario = JSON.parse(localStorage.getItem("usuarioActivo"));
+
+    if (usuario) {
+      document.getElementById("bienvenida").textContent =
+        `Bienvenido de nuevo, ${usuario.nombre} ${usuario.apellido}`;
+
+      document.getElementById("perfilInfo").innerHTML =
+        `<strong>${usuario.nombre} ${usuario.apellido}</strong>`;
+    } else {
+      window.location.href = "login.html";
+    }
+
+    function cerrarSesion() {
+      localStorage.removeItem("usuarioActivo");
+      window.location.href = "login.html";
+    }
+
+    function togglePerfil() {
+      const info = document.getElementById("perfilInfo");
+      info.classList.toggle("show");
+    }
+
+    // Ocultar el menú si se hace clic fuera
+    window.addEventListener("click", function(e) {
+      const perfil = document.getElementById("perfilInfo");
+      if (!e.target.closest('.logo-perfil')) {
+        perfil.classList.remove("show");
+      }
+    });
+  </script>
+
+</body>
+</html>
